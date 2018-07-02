@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "version": "1.0.0",
+  "description": ":octocat: A GitHub website implementation in React &amp; RSUITE",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SevenOutman/GitHub-in-RSUITE.git"
+  },
+  "author": "SevenOutman<leishenghao@126.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SevenOutman/GitHub-in-RSUITE/issues"
+  },
+  "homepage": "https://github.com/SevenOutman/GitHub-in-RSUITE#readme"
+}
