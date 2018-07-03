@@ -1,0 +1,25 @@
+@import "~rsuite/styles/mixins/palette";
+
+@min-page-width: 1366px;
+// 同时在 `./Table/routes.js:13` 中 MIN_PAGE_HEIGHT 变量使用
+@min-page-height: 768px;
+@main-content-margin-top: 20px;
+@main-content-margin-bottom: 60px;
+
+@icon-font-path: './fonts';
+
+// 产品主色，只用于左侧边栏
+@theme-color: #34c3ff;
+@T050: color(~`palette("@{theme-color}", 50)`);
+@T100: color(~`palette("@{theme-color}", 100)`);
+@T200: color(~`palette("@{theme-color}", 200)`);
+@T300: color(~`palette("@{theme-color}", 300)`);
+@T400: color(~`palette("@{theme-color}", 400)`);
+@T500: @theme-color;
+@T600: color(~`palette("@{theme-color}", 600)`);
+@T700: color(~`palette("@{theme-color}", 700)`);
+@T800: color(~`palette("@{theme-color}", 800)`);
+@T900: color(~`palette("@{theme-color}", 900)`);
+
+// 重写 rsuite 颜色
+@base-color: #34c3ff;
