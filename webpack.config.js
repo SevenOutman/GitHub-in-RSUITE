@@ -31,7 +31,8 @@ const config = {
     historyApiFallback: true,
     compress: true,
     host: '0.0.0.0',
-    port: 3200
+    port: 3200,
+    open: true
   },
   entry: {
     app: './src/index.js'

@@ -5,7 +5,6 @@
     "react"
   ],
   "plugins": [
-    "relay",
     "lodash",
     "transform-class-properties",
     "transform-proto-to-assign",

@@ -66,3 +66,4 @@ dist
 yarn.lock
 package-lock.json
 /index.html
+/src/graphql/access-token.js
