@@ -1,0 +1,29 @@
+query Repo($owner: String!, $name: String!) {
+  repository(owner: $owner, name: $name) {
+    nameWithOwner
+    watchers {
+      totalCount
+    }
+    stargazers {
+      totalCount
+    }
+    forks {
+      totalCount
+    }
+    defaultBranchRef {
+      name
+      target {
+        ... on Commit {
+          tree {
+            entries {
+              name
+              type
+              mode
+              oid
+            }
+          }
+        }
+      }
+    }
+  }
+}

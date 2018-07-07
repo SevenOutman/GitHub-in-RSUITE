@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Content, Dropdown, Footer, Header, Icon, Nav, Navbar } from 'rsuite';
 import { Link } from 'react-router';
 import { graphql } from 'react-apollo';
-import query from './index.gql';
+import query from './index.graphql';
 import './index.less';
 
 function Layout({ children, data: { viewer } }) {

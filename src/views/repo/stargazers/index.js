@@ -1,35 +1,59 @@
+// @flow
 import React from 'react';
 import { graphql } from 'react-apollo';
-import { Button, ButtonGroup, ButtonToolbar, Col, Grid, Nav, Panel, Row } from 'rsuite';
-import query from './index.gql';
+import { ButtonGroup, ButtonToolbar, Col, Grid, Nav, Panel, Row } from 'rsuite';
 import { Link } from 'react-router';
+import LinkButton from '@/components/LinkButton';
+import type { PageInfo } from '@/flow/types';
+import query from './index.graphql';
+import RepoLayout from '@/views/repo/Layout';
 
-function NavButton(props) {
-  return (
-    <Button componentClass={Link} {...props} />
-  );
+type Props = {
+  data: {
+    repository: {
+      stargazers: {
+        pageInfo: PageInfo
+      }
+    }
+  }
 }
 
-function Stargazers({ data: { loading, error, repository }, location: { pathname } }) {
+function Stargazers({ data: { loading, error, repository }, location: { pathname } }: Props) {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
-  return (
-    <div key={repository.nameWithOwner} className="repo-stargazers">
+  const { stargazers } = repository;
 
-      <Nav appearance="subtle" activeKey="overview">
-        <Nav.Item eventKey="code">Code</Nav.Item>
-        <Nav.Item eventKey="issues">Issues</Nav.Item>
-        <Nav.Item eventKey="prs">Pull requests</Nav.Item>
-        <Nav.Item eventKey="projects">Projects</Nav.Item>
-        <Nav.Item eventKey="wiki">Wiki</Nav.Item>
-        <Nav.Item eventKey="insights">Insights</Nav.Item>
-      </Nav>
+
+  function renderPagination() {
+    const { pageInfo } = stargazers;
+    return (
+      <ButtonToolbar>
+        <ButtonGroup>
+          <LinkButton
+            to={{ pathname, query: { before: pageInfo.startCursor } }}
+            disabled={!pageInfo.hasPreviousPage}
+          >
+            Previous
+          </LinkButton>
+          <LinkButton
+            to={{ pathname, query: { after: pageInfo.endCursor } }}
+            disabled={!pageInfo.hasNextPage}
+          >
+            Next
+          </LinkButton>
+        </ButtonGroup>
+      </ButtonToolbar>
+    );
+  }
+
+  return (
+    <RepoLayout key={repository.nameWithOwner} repo={repository} className="repo-stargazers">
       <h2>Stargazers</h2>
       <Grid fluid>
         <Row>
           {
-            repository.stargazers.nodes.map(user => (
+            stargazers.nodes.map(user => (
               <Col key={user.login} md={8}>
                 <Panel bordered>
                   <Link to={`/${user.login}`}>
@@ -44,23 +68,8 @@ function Stargazers({ data: { loading, error, repository }, location: { pathname
           }
         </Row>
       </Grid>
-      <ButtonToolbar>
-        <ButtonGroup>
-          <NavButton
-            to={{ pathname, query: { before: repository.stargazers.pageInfo.startCursor } }}
-            disabled={!repository.stargazers.pageInfo.hasPreviousPage}
-          >
-            Previous
-          </NavButton>
-          <NavButton
-            to={{ pathname, query: { after: repository.stargazers.pageInfo.endCursor } }}
-            disabled={!repository.stargazers.pageInfo.hasNextPage}
-          >
-            Next
-          </NavButton>
-        </ButtonGroup>
-      </ButtonToolbar>
-    </div>
+      {renderPagination()}
+    </RepoLayout>
   );
 }
 

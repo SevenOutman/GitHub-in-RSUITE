@@ -1,0 +1,23 @@
+query RepoTree($owner: String!, $name: String!, $expression: String) {
+  repository(owner: $owner, name: $name) {
+    nameWithOwner
+    watchers {
+      totalCount
+    }
+    stargazers {
+      totalCount
+    }
+    forks {
+      totalCount
+    }
+    object(expression: $expression) {
+      ... on Tree {
+        entries {
+          name
+          type
+          mode
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
-import query from './index.gql';
+import query from './index.graphql';
 import { Button, Col, ControlLabel, Form, FormControl, FormGroup, Grid, HelpBlock, Icon, Nav, Row } from 'rsuite';
 import { Link } from 'react-router';
 

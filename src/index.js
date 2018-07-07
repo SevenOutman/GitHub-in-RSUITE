@@ -6,6 +6,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from '@/App';
 
+// Apollo
+import { createClient } from '@/graphql/apollo';
 
 // bootstrap React App
-ReactDOM.render(<App />, document.getElementById('root'));
+
+createClient()
+  .then((apolloClient) => {
+    ReactDOM.render(<App apolloClient={apolloClient} />, document.getElementById('root'));
+  });

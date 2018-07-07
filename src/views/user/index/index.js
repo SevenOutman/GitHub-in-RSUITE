@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
 import { Col, FlexboxGrid, Grid, Nav, Row } from 'rsuite';
-import query from './index.gql';
+import query from './index.graphql';
 import './index.less';
 import UserCard from '@/views/user/index/UserCard';
 import PinnedRepo from '@/views/user/index/PinnedRepo';
