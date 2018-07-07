@@ -1,0 +1,11 @@
+query SettingsProfile {
+  viewer {
+    name
+    email
+    bio
+    websiteUrl
+    company
+    location
+    avatarUrl
+  }
+}

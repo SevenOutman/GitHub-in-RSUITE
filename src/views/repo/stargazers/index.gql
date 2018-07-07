@@ -1,0 +1,18 @@
+query stargazers($owner: String!, $name: String!, $after: String, $before: String) {
+  repository(owner: $owner, name: $name) {
+    nameWithOwner
+    stargazers(after: $after, before: $before, first: 51, orderBy: { direction: DESC, field: STARRED_AT }) {
+      nodes {
+        login
+        avatarUrl
+        name
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+        hasPreviousPage
+        startCursor
+      }
+    }
+  }
+}

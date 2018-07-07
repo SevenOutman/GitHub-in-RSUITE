@@ -58,6 +58,12 @@ const config = {
         exclude: /node_modules/
       },
       {
+        test: /\.(gql|graphql)$/,
+        use: [
+          'graphql-tag/loader'
+        ]
+      },
+      {
         test: /\.(less|css)$/,
         loader: extractLess.extract({
           use: getStyleLoader(),

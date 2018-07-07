@@ -1,9 +1,11 @@
 import React from 'react';
 import { Container, Content, Dropdown, Footer, Header, Icon, Nav, Navbar } from 'rsuite';
-import './index.less';
 import { Link } from 'react-router';
+import { graphql } from 'react-apollo';
+import query from './index.gql';
+import './index.less';
 
-function Layout({ children }) {
+function Layout({ children, data: { viewer } }) {
   return (
     <Container id="layout" className="layout">
       <Header>
@@ -25,9 +27,12 @@ function Layout({ children }) {
                   <Dropdown.Item>Contact</Dropdown.Item>
                 </Dropdown>
               </Nav>
-              <Nav pullRight>
-                <Nav.Item icon={<Icon icon="cog" />}>Settings</Nav.Item>
-              </Nav>
+              {
+                viewer &&
+                <Nav pullRight>
+                  <Nav.Item icon={<Icon icon="cog" />}>{viewer.login}</Nav.Item>
+                </Nav>
+              }
             </Navbar.Body>
           </div>
         </Navbar>
@@ -46,4 +51,4 @@ function Layout({ children }) {
   );
 }
 
-export default Layout;
+export default graphql(query)(Layout);
