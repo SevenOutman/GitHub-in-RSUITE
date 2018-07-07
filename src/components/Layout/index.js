@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 
 function Layout({ children }) {
   return (
-    <Container className="layout">
+    <Container id="layout" className="layout">
       <Header>
         <Navbar appearance="inverse">
           <div className="container-lg">
@@ -32,7 +32,7 @@ function Layout({ children }) {
           </div>
         </Navbar>
       </Header>
-      <Content>
+      <Content id="content">
         <div className="container-lg">
           {children}
         </div>

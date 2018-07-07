@@ -2,6 +2,7 @@ import Root from './index';
 
 import Layout from '@/components/Layout';
 import user from '@/views/user/routes';
+import repo from '@/views/repo/routes';
 
 const routes = {
   component: Root,
@@ -10,7 +11,8 @@ const routes = {
       path: '/',
       component: Layout,
       childRoutes: [
-        user
+        user,
+        repo
       ]
     },
     {
