@@ -8,6 +8,8 @@
 
 [options]
 module.name_mapper='^@' ->'<PROJECT_ROOT>/src'
-module.extensions=less
+module.file_ext=.js
+module.file_ext=.less
+module.file_ext=.graphql
 
 [strict]

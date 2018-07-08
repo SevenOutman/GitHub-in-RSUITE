@@ -4,7 +4,7 @@ import { graphql } from 'react-apollo';
 import { ButtonGroup, ButtonToolbar, Col, Grid, Nav, Panel, Row } from 'rsuite';
 import { Link } from 'react-router';
 import LinkButton from '@/components/LinkButton';
-import type { PageInfo } from '@/flow/types';
+import type { PageInfo } from '@/flow/graphql-types';
 import query from './index.graphql';
 import RepoLayout from '@/views/repo/Layout';
 

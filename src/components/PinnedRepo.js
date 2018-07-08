@@ -1,10 +1,17 @@
+// @flow
 import React from 'react';
 import { Panel, Icon } from 'rsuite';
 import { Link } from 'react-router';
+import type { Repository, RepositoryOwner } from '@/flow/graphql-types';
 
-function PinnedRepo({ repo, user }) {
+type Props = {
+  repo: Repository,
+  owner: RepositoryOwner
+}
 
-  const displayName = repo.nameWithOwner.startsWith(user.login) ? repo.name : repo.nameWithOwner
+function PinnedRepo({ repo, owner }: Props) {
+
+  const displayName = repo.nameWithOwner.startsWith(owner.login) ? repo.name : repo.nameWithOwner
 
   return (
     <Panel header={<Link to={`/${repo.nameWithOwner}`}>{displayName}</Link>} bordered>

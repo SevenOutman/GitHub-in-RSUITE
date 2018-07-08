@@ -1,10 +1,15 @@
 import React, { Fragment } from 'react';
 import { Button, Divider, Icon } from 'rsuite';
+import type { User } from '@/flow/graphql-types';
 
-function UserCard({ user }) {
+type Props = {
+  user: User
+};
+
+function UserCard({ user }: Props) {
   return (
     <div className="user-card">
-      <img src={user.avatarUrl} alt="avatar" className="avatar" />
+      <img src={user.avatarUrl} alt="avatar" className="avatar" style={{ width: '100%' }} />
       <h3>{user.name}</h3>
       <p>{user.login}</p>
       <p>{user.bio}</p>

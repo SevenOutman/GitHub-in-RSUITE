@@ -4,6 +4,7 @@ import Layout from '@/components/Layout';
 import user from '@/views/user/routes';
 import repo from '@/views/repo/routes';
 import settings from '@/views/settings/routes';
+import orgs from '@/views/orgs/routes';
 
 const routes = {
   component: Root,
@@ -13,6 +14,7 @@ const routes = {
       component: Layout,
       childRoutes: [
         settings,
+        orgs,
         user,
         repo
       ]

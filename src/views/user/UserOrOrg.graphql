@@ -1,0 +1,50 @@
+query UserOrOrg($login: String!) {
+  repositoryOwner(login: $login) {
+    avatarUrl(size: 100)
+    login
+    pinnedRepositories(first: 100) {
+      nodes {
+        name
+        nameWithOwner
+        description
+        primaryLanguage {
+          color
+          name
+        }
+        stargazers {
+          totalCount
+        }
+        forks {
+          totalCount
+        }
+      }
+    }
+    ... on User {
+      name
+      bio
+      isDeveloperProgramMember
+      company
+      location
+      email
+      websiteUrl
+      organizations(first: 100) {
+        nodes {
+          login
+          avatarUrl
+        }
+      }
+    }
+    ... on Organization {
+      name
+      description
+      location
+      websiteUrl
+      members(first: 16) {
+        nodes {
+          login
+          avatarUrl
+        }
+      }
+    }
+  }
+}

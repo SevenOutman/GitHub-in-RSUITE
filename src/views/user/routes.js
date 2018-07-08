@@ -1,6 +1,6 @@
-import User from './index';
+import UserOrOrg from '@/views/user/UserOrOrg';
 
 export default {
   path: ':login',
-  component: User
+  component: UserOrOrg
 };
