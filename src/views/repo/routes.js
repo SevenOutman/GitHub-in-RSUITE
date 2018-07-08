@@ -2,6 +2,7 @@ import Repo from './index';
 import Stargazers from './stargazers';
 import Tree from '@/views/repo/tree';
 import Blob from '@/views/repo/blob';
+import RepoIssues from '@/views/repo/issues';
 
 export default {
   path: ':owner/:name',
@@ -20,6 +21,15 @@ export default {
     {
       path: 'stargazers',
       component: Stargazers
+    },
+    {
+      path: 'issues',
+      indexRoute: {
+        component: RepoIssues
+      },
+      childRoutes: [
+
+      ]
     }
   ]
 };

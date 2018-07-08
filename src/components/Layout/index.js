@@ -3,42 +3,44 @@ import React from 'react';
 import { Container, Content, Dropdown, Footer, Header, Icon, Nav, Navbar } from 'rsuite';
 import { Link } from 'react-router';
 import { graphql } from 'react-apollo';
+import type { User } from '@/flow/graphql-types';
+import type { Node } from 'react';
 import query from './index.graphql';
 import './index.less';
-import type { User } from '@/flow/graphql-types';
 
 type Props = {
+  children?: Node,
   data: {
     viewer: User
   }
 }
 
-function Layout({ children, data: { viewer } }) {
+function Layout({ children, data: { viewer } }: Props) {
   return (
     <Container id="layout" className="layout">
       <Header>
         <Navbar appearance="inverse">
           <div className="container-lg">
             <Navbar.Header>
-              <Link className="navbar-brand logo" to="/">
+              <Link className="navbar-brand logo" to={viewer ? `/${viewer.login}` : '/'}>
                 <Icon icon="github" size="2x" />
               </Link>
             </Navbar.Header>
             <Navbar.Body>
               <Nav>
-                <Nav.Item icon={<Icon icon="home" />}>Home</Nav.Item>
-                <Nav.Item>News</Nav.Item>
-                <Nav.Item>Products</Nav.Item>
-                <Dropdown title="About">
-                  <Dropdown.Item>Company</Dropdown.Item>
-                  <Dropdown.Item>Team</Dropdown.Item>
-                  <Dropdown.Item>Contact</Dropdown.Item>
-                </Dropdown>
+                <Nav.Item>Pull requests</Nav.Item>
+                <Nav.Item>Issues</Nav.Item>
+                <Nav.Item>Marketplace</Nav.Item>
+                <Nav.Item>Explore</Nav.Item>
               </Nav>
               {
                 viewer &&
                 <Nav pullRight>
-                  <Nav.Item icon={<Icon icon="cog" />}>{viewer.login}</Nav.Item>
+                  <Dropdown
+                    title={viewer.login}
+                  >
+                    <Dropdown.Item componentClass={Link} to="/settings">Settings</Dropdown.Item>
+                  </Dropdown>
                 </Nav>
               }
             </Navbar.Body>

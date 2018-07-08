@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { Button, Divider, Icon } from 'rsuite';
 import type { User } from '@/flow/graphql-types';
+import AvatarLink from '@/components/AvatarLink';
 
 type Props = {
   user: User
@@ -55,7 +56,7 @@ function UserCard({ user }: Props) {
           </Divider>
           {
             user.organizations.nodes.map(org => (
-              <img key={org.login} src={org.avatarUrl} alt="" width={35} />
+              <AvatarLink key={org.login} actor={org} size={35} />
             ))
           }
         </Fragment>

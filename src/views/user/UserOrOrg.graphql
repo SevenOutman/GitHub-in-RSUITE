@@ -1,6 +1,5 @@
 query UserOrOrg($login: String!) {
   repositoryOwner(login: $login) {
-    avatarUrl(size: 100)
     login
     pinnedRepositories(first: 100) {
       nodes {
@@ -20,6 +19,7 @@ query UserOrOrg($login: String!) {
       }
     }
     ... on User {
+      avatarUrl(size: 460)
       name
       bio
       isDeveloperProgramMember
@@ -30,11 +30,24 @@ query UserOrOrg($login: String!) {
       organizations(first: 100) {
         nodes {
           login
-          avatarUrl
+          avatarUrl(size: 35)
         }
+      }
+      repositories {
+        totalCount
+      }
+      starredRepositories {
+        totalCount
+      }
+      followers {
+        totalCount
+      }
+      following {
+        totalCount
       }
     }
     ... on Organization {
+      avatarUrl(size: 100)
       name
       description
       location
@@ -42,8 +55,9 @@ query UserOrOrg($login: String!) {
       members(first: 16) {
         nodes {
           login
-          avatarUrl
+          avatarUrl(size: 48)
         }
+        totalCount
       }
     }
   }

@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Col, Icon, Nav, Panel, Row } from 'rsuite';
 import PinnedRepo from '@/components/PinnedRepo';
 import AvatarLink from '@/components/AvatarLink';
@@ -22,12 +22,21 @@ function OrgProfileView({ org }: Props) {
           <h1>{org.name}</h1>
           <p>{org.description}</p>
           <p>
-            <Icon icon="map-marker" fixedWidth />{org.location}
-
-            <Icon icon="link" fixedWidth />
-            <a href={org.websiteUrl} target="_blank">
-              {org.websiteUrl}
-            </a>
+            {
+              org.location &&
+              <Fragment>
+                <Icon icon="map-marker" fixedWidth />{org.location}
+              </Fragment>
+            }
+            {
+              org.websiteUrl &&
+              <Fragment>
+                <Icon icon="link" fixedWidth />
+                <a href={org.websiteUrl} target="_blank">
+                  {org.websiteUrl}
+                </a>
+              </Fragment>
+            }
           </p>
         </div>
       </div>
@@ -41,7 +50,7 @@ function OrgProfileView({ org }: Props) {
         bordered
         header={
           <Link to={`/orgs/${org.login}/people`}>
-            <h4>People</h4>
+            <h4>People({org.members.totalCount})</h4>
           </Link>
         }
       >

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Table } from 'rsuite';
+import { Icon, Loader, Table } from 'rsuite';
 import { graphql } from 'react-apollo';
 import _ from 'lodash';
 import RepoLayout from '@/views/repo/Layout';
@@ -21,7 +21,7 @@ function FileNameCell({ rowData, dataKey = 'name', routeNamespace, refName, ...p
 }
 
 function Repo({ data: { loading, error, repository } }) {
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader />;
   if (error) return <p>Error :(</p>;
 
   function getTableData() {

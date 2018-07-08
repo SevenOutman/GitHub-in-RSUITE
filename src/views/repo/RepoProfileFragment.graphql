@@ -1,0 +1,12 @@
+fragment RepoProfile on Repository {
+  nameWithOwner
+  watchers {
+    totalCount
+  }
+  stargazers {
+    totalCount
+  }
+  forks {
+    totalCount
+  }
+}

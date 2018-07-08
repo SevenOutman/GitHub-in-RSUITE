@@ -1,0 +1,23 @@
+#import "../RepoProfileFragment.graphql"
+
+query RepoIssues($owner: String!, $name: String!, $first: Int, $after: String, $last: Int,$before: String) {
+  repository(owner: $owner, name: $name) {
+    ...RepoProfile
+    issues(first: $first, after: $after, last: $last, before: $before, orderBy: { direction: DESC, field: CREATED_AT}) {
+      nodes {
+        title
+        number
+        closed
+        comments {
+          totalCount
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+        hasPreviousPage
+        startCursor
+      }
+    }
+  }
+}

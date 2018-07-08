@@ -4,11 +4,17 @@
 type Int = number;
 type ID = string | Int;
 type URI = string;
+type String = string;
 
 
 // Interfaces
 type Node = {
   id: ID;
+}
+
+// Query
+export type Query = {
+  repository?: Repository
 }
 
 // Objects
@@ -30,7 +36,11 @@ export type RepositoryOwner = Node & Actor & {
 }
 
 export type User = RepositoryOwner & {
+  followers: UserConnection,
+  following: UserConnection,
   organizations: OrganizationConnection,
+  repositories: RepositoryConnection,
+  starredRepositories: RepositoryConnection,
 
   bio?: string,
   company?: string,
@@ -51,12 +61,18 @@ export type Organization = RepositoryOwner & {
 
 export type Repository = Node & {
   forks: RepositoryConnection,
+  issues: IssueConnection,
   stargazers: StargazerConnection,
 
   description?: string,
   name: string,
   nameWithOwner: string,
   primaryLanguage: Language,
+}
+
+export type Issue = Node & {
+  title: string,
+  number: Int
 }
 
 type Language = Node & {
@@ -97,6 +113,18 @@ type RepositoryEdge = {
 type RepositoryConnection = {
   edges: RepositoryEdge[],
   nodes: Repository[],
+  pageInfo: PageInfo,
+  totalCount: Int
+}
+
+type IssueEdge = {
+  cursor: String,
+  node: Issue
+}
+
+type IssueConnection = {
+  edges: IssueEdge[],
+  nodes: Issue[],
   pageInfo: PageInfo,
   totalCount: Int
 }

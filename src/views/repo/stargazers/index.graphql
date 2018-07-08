@@ -1,10 +1,17 @@
-query stargazers($owner: String!, $name: String!, $after: String, $before: String) {
+query stargazers($owner: String!, $name: String!,  $first: Int, $after: String, $last: Int,$before: String) {
   repository(owner: $owner, name: $name) {
     nameWithOwner
-    stargazers(after: $after, before: $before, first: 51, orderBy: { direction: DESC, field: STARRED_AT }) {
+    watchers {
+      totalCount
+    }
+    forks {
+      totalCount
+    }
+    stargazers(first: $first, after: $after, last: $last, before: $before, orderBy: { direction: DESC, field: STARRED_AT }) {
+      totalCount
       nodes {
         login
-        avatarUrl
+        avatarUrl(size: 75)
         name
       }
       pageInfo {

@@ -1,51 +1,26 @@
 // @flow
 import React from 'react';
 import { graphql } from 'react-apollo';
-import { ButtonGroup, ButtonToolbar, Col, Grid, Nav, Panel, Row } from 'rsuite';
+import { Col, Grid, Panel, Row } from 'rsuite';
 import { Link } from 'react-router';
-import LinkButton from '@/components/LinkButton';
-import type { PageInfo } from '@/flow/graphql-types';
+import type { Repository } from '@/flow/graphql-types';
 import query from './index.graphql';
 import RepoLayout from '@/views/repo/Layout';
+import type { RouteProps } from '@/flow/react-router';
+import type { ApolloProps } from '@/flow/react-apollo';
+import Pagination from '@/components/Pagination';
 
-type Props = {
-  data: {
-    repository: {
-      stargazers: {
-        pageInfo: PageInfo
-      }
-    }
-  }
+type Query = {
+  repository: Repository
 }
 
-function Stargazers({ data: { loading, error, repository }, location: { pathname } }: Props) {
+type Props = ApolloProps<Query> & RouteProps;
+
+function Stargazers({ data: { loading, error, repository } }: Props) {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
   const { stargazers } = repository;
-
-
-  function renderPagination() {
-    const { pageInfo } = stargazers;
-    return (
-      <ButtonToolbar>
-        <ButtonGroup>
-          <LinkButton
-            to={{ pathname, query: { before: pageInfo.startCursor } }}
-            disabled={!pageInfo.hasPreviousPage}
-          >
-            Previous
-          </LinkButton>
-          <LinkButton
-            to={{ pathname, query: { after: pageInfo.endCursor } }}
-            disabled={!pageInfo.hasNextPage}
-          >
-            Next
-          </LinkButton>
-        </ButtonGroup>
-      </ButtonToolbar>
-    );
-  }
 
   return (
     <RepoLayout key={repository.nameWithOwner} repo={repository} className="repo-stargazers">
@@ -68,11 +43,17 @@ function Stargazers({ data: { loading, error, repository }, location: { pathname
           }
         </Row>
       </Grid>
-      {renderPagination()}
+      <Pagination pageInfo={stargazers.pageInfo} />
     </RepoLayout>
   );
 }
 
 export default graphql(query, {
-  options: ({ params: { owner, name }, location: { query: { after } } }) => ({ variables: { owner, name, after } })
+  options: ({ params: { owner, name }, location: { query: { before, after } } }) => {
+    const perPage = 51;
+    const pagination = before ? { last: perPage, before } : { first: perPage, after };
+    return {
+      variables: { owner, name, ...pagination }
+    };
+  }
 })(Stargazers);
