@@ -1,10 +1,11 @@
 import React from 'react';
-import { Icon, Loader, Table } from 'rsuite';
+import { ButtonGroup, ButtonToolbar, Icon, Loader, Table } from 'rsuite';
 import { graphql } from 'react-apollo';
 import _ from 'lodash';
 import RepoLayout from '@/views/repo/Layout';
 import query from './index.graphql';
 import { Link } from 'react-router';
+import LinkButton from '@/components/LinkButton';
 
 const { Column, Cell, HeaderCell } = Table;
 
@@ -24,17 +25,37 @@ function Repo({ data: { loading, error, repository } }) {
   if (loading) return <Loader />;
   if (error) return <p>Error :(</p>;
 
-  function getTableData() {
-    const { defaultBranchRef: { target: { tree: { entries } } } } = repository;
-
-    return _.orderBy(entries, ['type', 'name'], ['desc', 'asc']);
+  function renderNavButtons() {
+    const { nameWithOwner, defaultBranchRef: { name: defaultBranch, target: { history } }, branches, tags, licenseInfo } = repository;
+    return (
+      <div>
+        <ButtonToolbar>
+          <ButtonGroup>
+            <LinkButton appearance="ghost" to={`/${nameWithOwner}/commits/${defaultBranch}`}>{history.totalCount}commits</LinkButton>
+            <LinkButton appearance="ghost" to={`${nameWithOwner}/branches`}>{branches.totalCount}branches</LinkButton>
+            <LinkButton appearance="ghost" to={`${nameWithOwner}/releases`}>{tags.totalCount}releases</LinkButton>
+            <LinkButton appearance="ghost" to={`${nameWithOwner}/graph/contributors`}>contributors</LinkButton>
+            {
+              licenseInfo &&
+              <LinkButton appearance="ghost">{licenseInfo.spdxId}</LinkButton>
+            }
+          </ButtonGroup>
+        </ButtonToolbar>
+      </div>
+    );
   }
 
-  const routeNamespace = `/${repository.nameWithOwner}`;
-  const refName = repository.defaultBranchRef.name;
+  function renderTree() {
+    const routeNamespace = `/${repository.nameWithOwner}`;
+    const refName = repository.defaultBranchRef.name;
 
-  return (
-    <RepoLayout key={repository.nameWithOwner} repo={repository} className="repo">
+    function getTableData() {
+      const { defaultBranchRef: { target: { tree: { entries } } } } = repository;
+
+      return _.orderBy(entries, ['type', 'name'], ['desc', 'asc']);
+    }
+
+    return (
       <Table data={getTableData()} autoHeight>
         <Column flexGrow={1}>
           <HeaderCell>Name</HeaderCell>
@@ -49,6 +70,14 @@ function Repo({ data: { loading, error, repository } }) {
           <Cell dataKey="mode" />
         </Column>
       </Table>
+    );
+  }
+
+  return (
+    <RepoLayout key={repository.nameWithOwner} repo={repository} className="repo">
+      <p>{repository.description}</p>
+      {renderNavButtons()}
+      {renderTree()}
     </RepoLayout>
   );
 }

@@ -1,11 +1,12 @@
 import React, { Fragment } from 'react';
 import _ from 'lodash';
-import { Icon, Loader, Table } from 'rsuite';
+import { Icon, Loader, Table, ButtonToolbar, ButtonGroup, Button } from 'rsuite';
 import { graphql } from 'react-apollo';
 import { Link } from 'react-router';
 import RepoLayout from '@/views/repo/Layout';
 import query from './index.graphql';
 import Pagination from '@/components/Pagination';
+import LinkButton from '@/components/LinkButton';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -48,15 +49,29 @@ function RepoIssues({ data: { loading, error, repository } }) {
 
   const { issues } = repository;
 
+  function renderTableToolbar() {
+    const routeNamespace = `/${repository.nameWithOwner}`;
+    return (
+      <div style={{ marginTop: 10, marginBottom: 10 }}>
+        <ButtonToolbar>
+          <ButtonGroup>
+            <LinkButton appearance="ghost" to={`${routeNamespace}/labels`}>Labels</LinkButton>
+            <LinkButton appearance="ghost" to={`${routeNamespace}/milestones`}>Milestones</LinkButton>
+          </ButtonGroup>
+          <LinkButton appearance="primary" style={{ float: 'right' }} to={`${routeNamespace}/issues/new`}>New issue</LinkButton>
+        </ButtonToolbar>
+      </div>
+    );
+  }
+
   function getTableData() {
     const { nodes } = issues;
     return _.orderBy(nodes, 'number', 'desc');
   }
 
-  const routeNamespace = `/${repository.nameWithOwner}/issues`;
-
-  return (
-    <RepoLayout key={repository.nameWithOwner} repo={repository} className="repo">
+  function renderTable() {
+    const routeNamespace = `/${repository.nameWithOwner}/issues`;
+    return (
       <Table data={getTableData()} autoHeight>
         <Column width={38} align="center">
           <HeaderCell />
@@ -71,6 +86,13 @@ function RepoIssues({ data: { loading, error, repository } }) {
           <IssueCommentsCell dataKey="comments.totalCount" />
         </Column>
       </Table>
+    );
+  }
+
+  return (
+    <RepoLayout key={repository.nameWithOwner} repo={repository} className="repo">
+      {renderTableToolbar()}
+      {renderTable()}
       <Pagination pageInfo={issues.pageInfo} />
     </RepoLayout>
   );

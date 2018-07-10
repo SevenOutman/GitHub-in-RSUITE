@@ -1,0 +1,40 @@
+#import "../RepoProfileFragment.graphql"
+
+query RepoIssues($owner: String!, $name: String!, $ref: String!, $first: Int, $after: String, $last: Int,$before: String) {
+  repository(owner: $owner, name: $name) {
+    ...RepoProfile
+    ref(qualifiedName: $ref) {
+      target{
+        ... on Commit {
+          history(first: $first, after: $after, last: $last, before: $before) {
+            nodes {
+              message
+              committedDate
+              oid
+              author {
+                name
+                avatarUrl
+                user {
+                  login
+                }
+              }
+              committer {
+                name
+                avatarUrl
+                user {
+                  login
+                }
+              }
+            }
+            pageInfo {
+              endCursor
+              hasNextPage
+              hasPreviousPage
+              startCursor
+            }
+          }
+        }
+      }
+    }
+  }
+}

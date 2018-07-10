@@ -3,10 +3,24 @@
 query Repo($owner: String!, $name: String!) {
   repository(owner: $owner, name: $name) {
     ...RepoProfile
+    description
+    licenseInfo {
+      spdxId
+    }
+    tags:refs(refPrefix: "refs/tags/") {
+      totalCount
+    }
+    branches:refs(refPrefix: "refs/heads/") {
+      totalCount
+    }
     defaultBranchRef {
       name
       target {
         ... on Commit {
+          history {
+            # commits count
+            totalCount
+          }
           tree {
             entries {
               name

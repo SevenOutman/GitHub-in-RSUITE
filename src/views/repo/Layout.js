@@ -48,7 +48,9 @@ function RepoLayout({ params: { owner, name }, repo, router: { isActive }, child
         <NavLink to={routeNamespace} active={isActive(routeNamespace, true)}>
           <Icon icon="code" fixedWidth />Code
         </NavLink>
-        <NavLink to={`${routeNamespace}/issues`} active={isActive(`${routeNamespace}/issues`)}>Issues</NavLink>
+        <NavLink to={`${routeNamespace}/issues`} active={isActive(`${routeNamespace}/issues`)}>
+          <Icon icon="exclamation-circle2" fixedWidth />Issues
+        </NavLink>
         <NavLink to={`${routeNamespace}/pulls`} active={isActive(`${routeNamespace}/pulls`)}>Pull requests</NavLink>
         <NavLink to={`${routeNamespace}/projects`} active={isActive(`${routeNamespace}/projects`)}>Projects</NavLink>
         <NavLink to={`${routeNamespace}/wiki`} active={isActive(`${routeNamespace}/wiki`)}>Wiki</NavLink>

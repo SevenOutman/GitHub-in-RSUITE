@@ -3,6 +3,7 @@ import Stargazers from './stargazers';
 import Tree from '@/views/repo/tree';
 import Blob from '@/views/repo/blob';
 import RepoIssues from '@/views/repo/issues';
+import Commits from '@/views/repo/commits';
 
 export default {
   path: ':owner/:name',
@@ -17,6 +18,10 @@ export default {
     {
       path: 'blob/:ref/:path',
       component: Blob,
+    },
+    {
+      path: 'commits/:ref',
+      component: Commits
     },
     {
       path: 'stargazers',
