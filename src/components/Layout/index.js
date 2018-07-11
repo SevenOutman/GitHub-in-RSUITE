@@ -37,9 +37,22 @@ function Layout({ children, data: { viewer } }: Props) {
                 viewer &&
                 <Nav pullRight>
                   <Dropdown
-                    title={viewer.login}
+                    title={
+                      <img src={viewer.avatarUrl} alt={viewer.login} height={20} />
+                    }
                   >
-                    <Dropdown.Item componentClass={Link} to="/settings">Settings</Dropdown.Item>
+                    <Dropdown.Item panel style={{ padding: 10, width: 160, color: '#575757' }}>
+                      <p>Signed in as</p>
+                      <strong>{viewer.login}</strong>
+                    </Dropdown.Item>
+                    <Dropdown.Item divider />
+                    <Dropdown.Item componentClass={Link} to={`/${viewer.login}`}>Your profile</Dropdown.Item>
+                    <Dropdown.Item componentClass={Link} to={`/${viewer.login}?tab=stars`}>Your stars</Dropdown.Item>
+                    <Dropdown.Item>Your Gists</Dropdown.Item>
+                    <Dropdown.Item divider />
+                    <Dropdown.Item>Help</Dropdown.Item>
+                    <Dropdown.Item componentClass={Link} to="/settings/profile">Settings</Dropdown.Item>
+                    <Dropdown.Item>Sign out</Dropdown.Item>
                   </Dropdown>
                 </Nav>
               }

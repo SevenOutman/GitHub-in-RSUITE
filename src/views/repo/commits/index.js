@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import _ from 'lodash';
-import { Icon, Loader, Table, ButtonToolbar, ButtonGroup, Button } from 'rsuite';
+import { Icon, SelectPicker, Loader, Table, ButtonToolbar, ButtonGroup, Button, Dropdown } from 'rsuite';
 import { graphql } from 'react-apollo';
 import { Link } from 'react-router';
 import RepoLayout from '@/views/repo/Layout';
@@ -18,18 +18,27 @@ function CommitLinkCell({ rowData, dataKey = 'message', routeNamespace, ...props
   );
 }
 
-function BranchCommits({ data: { loading, error, repository } }) {
+function BranchCommits({ data: { loading, error, repository }, params: { ref } }) {
   if (loading) return <Loader />;
   if (error) return <p>Error :(</p>;
 
   const { ref: { target: { history } } } = repository;
 
   function renderTableToolbar() {
-    const routeNamespace = `/${repository.nameWithOwner}`;
+    const { branches: { nodes } } = repository;
+    const routeNamespace = `/${repository.nameWithOwner}/commits`;
+
     return (
       <div style={{ marginTop: 10, marginBottom: 10 }}>
         <ButtonToolbar>
           <ButtonGroup>
+            <Dropdown title={`Branch: ${ref}`}>
+              {
+                nodes.map(branch => (
+                  <Dropdown.Item key={branch.name} componentClass={Link} to={`${routeNamespace}/${branch.name}`} active={branch.name === ref}>{branch.name}</Dropdown.Item>
+                ))
+              }
+            </Dropdown>
           </ButtonGroup>
         </ButtonToolbar>
       </div>

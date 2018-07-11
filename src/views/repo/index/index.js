@@ -32,9 +32,9 @@ function Repo({ data: { loading, error, repository } }) {
         <ButtonToolbar>
           <ButtonGroup>
             <LinkButton appearance="ghost" to={`/${nameWithOwner}/commits/${defaultBranch}`}>{history.totalCount}commits</LinkButton>
-            <LinkButton appearance="ghost" to={`${nameWithOwner}/branches`}>{branches.totalCount}branches</LinkButton>
-            <LinkButton appearance="ghost" to={`${nameWithOwner}/releases`}>{tags.totalCount}releases</LinkButton>
-            <LinkButton appearance="ghost" to={`${nameWithOwner}/graph/contributors`}>contributors</LinkButton>
+            <LinkButton appearance="ghost" to={`/${nameWithOwner}/branches`}>{branches.totalCount}branches</LinkButton>
+            <LinkButton appearance="ghost" to={`/${nameWithOwner}/releases`}>{tags.totalCount}releases</LinkButton>
+            <LinkButton appearance="ghost" to={`/${nameWithOwner}/graph/contributors`}>contributors</LinkButton>
             {
               licenseInfo &&
               <LinkButton appearance="ghost">{licenseInfo.spdxId}</LinkButton>

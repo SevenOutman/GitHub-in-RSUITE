@@ -1,5 +1,6 @@
 query {
   viewer {
+    avatarUrl(size: 40)
     login
   }
 }
