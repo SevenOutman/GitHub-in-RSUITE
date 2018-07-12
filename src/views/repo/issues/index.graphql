@@ -1,9 +1,9 @@
 #import "../RepoProfileFragment.graphql"
 
-query RepoIssues($owner: String!, $name: String!, $first: Int, $after: String, $last: Int,$before: String) {
+query RepoIssues($owner: String!, $name: String!, $first: Int, $after: String, $last: Int, $before: String, $orderField: IssueOrderField = CREATED_AT, $orderDirection: OrderDirection = DESC) {
   repository(owner: $owner, name: $name) {
     ...RepoProfile
-    issues(first: $first, after: $after, last: $last, before: $before, orderBy: { direction: DESC, field: CREATED_AT}) {
+    issues(first: $first, after: $after, last: $last, before: $before, orderBy: { direction: $orderDirection, field: $orderField}) {
       nodes {
         title
         number

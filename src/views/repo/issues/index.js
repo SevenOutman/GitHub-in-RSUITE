@@ -58,13 +58,48 @@ function RepoIssues({ data: { loading, error, repository } }) {
             <LinkButton appearance="ghost" to={`${routeNamespace}/labels`}>Labels</LinkButton>
             <LinkButton appearance="ghost" to={`${routeNamespace}/milestones`}>Milestones</LinkButton>
           </ButtonGroup>
-          <LinkButton appearance="primary" style={{ float: 'right' }} to={`${routeNamespace}/issues/new`}>New issue</LinkButton>
+          <LinkButton appearance="primary" style={{ float: 'right' }} to={`${routeNamespace}/issues/new`}>New
+            issue</LinkButton>
         </ButtonToolbar>
         <ButtonToolbar>
           <ButtonGroup>
             <Dropdown title="Sort by">
-              <Dropdown.Item componentClass={Link}>Newest</Dropdown.Item>
-              <Dropdown.Item componentClass={Link} to={`${routeNamespace}/issues?q=${encodeURIComponent('sort:created-asc')}`}>Oldest</Dropdown.Item>
+              <Dropdown.Item
+                componentClass={Link}
+                to={`${routeNamespace}/issues`}
+              >
+                Newest
+              </Dropdown.Item>
+              <Dropdown.Item
+                componentClass={Link}
+                to={`${routeNamespace}/issues?q=${encodeURIComponent('sort:created-asc')}`}
+              >
+                Oldest
+              </Dropdown.Item>
+              <Dropdown.Item
+                componentClass={Link}
+                to={`${routeNamespace}/issues?q=${encodeURIComponent('sort:comments-desc')}`}
+              >
+                Most commented
+              </Dropdown.Item>
+              <Dropdown.Item
+                componentClass={Link}
+                to={`${routeNamespace}/issues?q=${encodeURIComponent('sort:comments-asc')}`}
+              >
+                Least commented
+              </Dropdown.Item>
+              <Dropdown.Item
+                componentClass={Link}
+                to={`${routeNamespace}/issues?q=${encodeURIComponent('sort:updated-desc')}`}
+              >
+                Recently updated
+              </Dropdown.Item>
+              <Dropdown.Item
+                componentClass={Link}
+                to={`${routeNamespace}/issues?q=${encodeURIComponent('sort:updated-asc')}`}
+              >
+                Lease recently updated
+              </Dropdown.Item>
             </Dropdown>
           </ButtonGroup>
         </ButtonToolbar>
@@ -72,15 +107,11 @@ function RepoIssues({ data: { loading, error, repository } }) {
     );
   }
 
-  function getTableData() {
-    const { nodes } = issues;
-    return _.orderBy(nodes, 'number', 'desc');
-  }
-
   function renderTable() {
     const routeNamespace = `/${repository.nameWithOwner}/issues`;
+    const { nodes } = issues;
     return (
-      <Table data={getTableData()} autoHeight>
+      <Table data={nodes} autoHeight>
         <Column width={38} align="center">
           <HeaderCell />
           <IssueStatusCell dataKey="closed" />
@@ -107,11 +138,34 @@ function RepoIssues({ data: { loading, error, repository } }) {
 }
 
 export default graphql(query, {
-  options: ({ params: { owner, name }, location: { query: { before, after } } }) => {
+  options: ({ params: { owner, name }, location: { query: { before, after, q } } }) => {
     const perPage = 25;
     const pagination = before ? { last: perPage, before } : { first: perPage, after };
+
+    let orderField;
+    let orderDirection;
+    if (q) {
+
+      const queries = q.split('+').map(query => query.split(':'));
+
+      const sort = queries.find(([key, value]) => key === 'sort');
+
+      if (sort) {
+        const [field, direction] = sort[1].split('-');
+        orderField = {
+          created: 'CREATED_AT',
+          comments: 'COMMENTS',
+          updated: 'UPDATED_AT'
+        }[field];
+        orderDirection = {
+          asc: 'ASC',
+          desc: 'DESC'
+        }[direction];
+      }
+    }
+
     return {
-      variables: { owner, name, ...pagination }
+      variables: { owner, name, orderField, orderDirection, ...pagination }
     };
   }
 })(RepoIssues);
