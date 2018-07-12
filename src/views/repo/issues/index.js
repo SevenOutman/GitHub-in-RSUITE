@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import _ from 'lodash';
-import { Icon, Loader, Table, ButtonToolbar, ButtonGroup, Button } from 'rsuite';
+import { Icon, Loader, Table, ButtonToolbar, ButtonGroup, Button, Dropdown } from 'rsuite';
 import { graphql } from 'react-apollo';
 import { Link } from 'react-router';
 import RepoLayout from '@/views/repo/Layout';
@@ -59,6 +59,14 @@ function RepoIssues({ data: { loading, error, repository } }) {
             <LinkButton appearance="ghost" to={`${routeNamespace}/milestones`}>Milestones</LinkButton>
           </ButtonGroup>
           <LinkButton appearance="primary" style={{ float: 'right' }} to={`${routeNamespace}/issues/new`}>New issue</LinkButton>
+        </ButtonToolbar>
+        <ButtonToolbar>
+          <ButtonGroup>
+            <Dropdown title="Sort by">
+              <Dropdown.Item componentClass={Link}>Newest</Dropdown.Item>
+              <Dropdown.Item componentClass={Link} to={`${routeNamespace}/issues?q=${encodeURIComponent('sort:created-asc')}`}>Oldest</Dropdown.Item>
+            </Dropdown>
+          </ButtonGroup>
         </ButtonToolbar>
       </div>
     );
