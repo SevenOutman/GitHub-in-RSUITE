@@ -43,11 +43,42 @@ function IssueCommentsCell({ rowData, dataKey = 'comments.totalCount', ...props 
   );
 }
 
-function RepoIssues({ data: { loading, error, repository } }) {
+function RepoIssues({ data: { loading, error, repository }, location: { pathname, query: { q } }, router }) {
   if (loading) return <Loader />;
   if (error) return <p>Error :(</p>;
 
   const { issues } = repository;
+
+  function query2q(query) {
+    return Object.keys(query)
+      .filter(key => query[key])
+      .sort()
+      .map(key => `${key}:${query[key]}`)
+      .join('+');
+  }
+
+  function q2query(q) {
+    return q.split('+').reduce((acc, segment) => {
+      const [key, value] = segment.split(':');
+      return {
+        ...acc,
+        [key]: value
+      };
+    }, {});
+  }
+
+  function getQueryLink(query) {
+    if (!q) {
+      return router.createPath({ pathname, query: { q: query2q(query) } });
+    }
+    return router.createPath({ pathname, query: { q: query2q({ ...q2query(q), ...query }) } });
+  }
+
+  function goQuery(query) {
+    router.push(getQueryLink(query));
+  }
+
+  const { is = 'open', sort = 'created-desc' } = q2query(q);
 
   function renderTableToolbar() {
     const routeNamespace = `/${repository.nameWithOwner}`;
@@ -63,40 +94,62 @@ function RepoIssues({ data: { loading, error, repository } }) {
         </ButtonToolbar>
         <ButtonToolbar>
           <ButtonGroup>
-            <Dropdown title="Sort by">
+            <Dropdown title="State" activeKey={is}>
               <Dropdown.Item
+                eventKey="open"
                 componentClass={Link}
-                to={`${routeNamespace}/issues`}
+                to={getQueryLink({ is: 'open' })}
+              >
+                Open
+              </Dropdown.Item>
+              <Dropdown.Item
+                eventKey="closed"
+                componentClass={Link}
+                to={getQueryLink({ is: 'closed' })}
+              >
+                Closed
+              </Dropdown.Item>
+            </Dropdown>
+            <Dropdown title="Sort by" activeKey={sort}>
+              <Dropdown.Item
+                eventKey="created-desc"
+                componentClass={Link}
+                to={getQueryLink({ sort: null })}
               >
                 Newest
               </Dropdown.Item>
               <Dropdown.Item
+                eventKey="created-asc"
                 componentClass={Link}
-                to={`${routeNamespace}/issues?q=${encodeURIComponent('sort:created-asc')}`}
+                to={getQueryLink({ sort: 'created-asc' })}
               >
                 Oldest
               </Dropdown.Item>
               <Dropdown.Item
+                eventKey="comments-desc"
                 componentClass={Link}
-                to={`${routeNamespace}/issues?q=${encodeURIComponent('sort:comments-desc')}`}
+                to={getQueryLink({ sort: 'comments-desc' })}
               >
                 Most commented
               </Dropdown.Item>
               <Dropdown.Item
+                eventKey="comments-asc"
                 componentClass={Link}
-                to={`${routeNamespace}/issues?q=${encodeURIComponent('sort:comments-asc')}`}
+                to={getQueryLink({ sort: 'comments-asc' })}
               >
                 Least commented
               </Dropdown.Item>
               <Dropdown.Item
+                eventKey="updated-desc"
                 componentClass={Link}
-                to={`${routeNamespace}/issues?q=${encodeURIComponent('sort:updated-desc')}`}
+                to={getQueryLink({ sort: 'updated-desc' })}
               >
                 Recently updated
               </Dropdown.Item>
               <Dropdown.Item
+                eventKey="updated-asc"
                 componentClass={Link}
-                to={`${routeNamespace}/issues?q=${encodeURIComponent('sort:updated-asc')}`}
+                to={getQueryLink({ sort: 'updated-asc' })}
               >
                 Lease recently updated
               </Dropdown.Item>
@@ -144,12 +197,12 @@ export default graphql(query, {
 
     let orderField;
     let orderDirection;
-    if (q) {
 
+    let states;
+    if (q) {
       const queries = q.split('+').map(query => query.split(':'));
 
       const sort = queries.find(([key, value]) => key === 'sort');
-
       if (sort) {
         const [field, direction] = sort[1].split('-');
         orderField = {
@@ -162,10 +215,18 @@ export default graphql(query, {
           desc: 'DESC'
         }[direction];
       }
+
+      const is = queries.find(([key, value]) => key === 'is');
+      if (is) {
+        states = {
+          open: ['OPEN'],
+          closed: ['CLOSED']
+        }[is[1]];
+      }
     }
 
     return {
-      variables: { owner, name, orderField, orderDirection, ...pagination }
+      variables: { owner, name, states, orderField, orderDirection, ...pagination }
     };
   }
 })(RepoIssues);
