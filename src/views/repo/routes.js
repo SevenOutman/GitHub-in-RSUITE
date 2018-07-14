@@ -3,6 +3,7 @@ import Stargazers from './stargazers';
 import Tree from '@/views/repo/tree';
 import Blob from '@/views/repo/blob';
 import RepoIssues from '@/views/repo/issues';
+import RepoPrs from '@/views/repo/pulls';
 import Commits from '@/views/repo/commits';
 
 export default {
@@ -31,6 +32,15 @@ export default {
       path: 'issues',
       indexRoute: {
         component: RepoIssues
+      },
+      childRoutes: [
+
+      ]
+    },
+    {
+      path: 'pulls',
+      indexRoute: {
+        component: RepoPrs
       },
       childRoutes: [
 

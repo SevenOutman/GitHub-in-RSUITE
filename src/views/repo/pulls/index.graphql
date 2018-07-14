@@ -1,0 +1,23 @@
+#import "../RepoProfileFragment.graphql"
+
+query RepoIssues($owner: String!, $name: String!, $first: Int, $after: String, $last: Int, $before: String, $states: [PullRequestState!] = [OPEN], $orderField: IssueOrderField = CREATED_AT, $orderDirection: OrderDirection = DESC) {
+  repository(owner: $owner, name: $name) {
+    ...RepoProfile
+    pullRequests(first: $first, after: $after, last: $last, before: $before, states: $states, orderBy: { direction: $orderDirection, field: $orderField}) {
+      nodes {
+        title
+        number
+        closed
+        comments {
+          totalCount
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+        hasPreviousPage
+        startCursor
+      }
+    }
+  }
+}

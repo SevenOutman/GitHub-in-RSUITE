@@ -43,11 +43,11 @@ function IssueCommentsCell({ rowData, dataKey = 'comments.totalCount', ...props 
   );
 }
 
-function RepoIssues({ data: { loading, error, repository }, location: { pathname, query: { q } }, router }) {
+function RepoPrs({ data: { loading, error, repository }, location: { pathname, query: { q } }, router }) {
   if (loading) return <Loader />;
   if (error) return <p>Error :(</p>;
 
-  const { issues } = repository;
+  const { pullRequests } = repository;
 
   function query2q(query) {
     const keys = Object.keys(query);
@@ -166,7 +166,7 @@ function RepoIssues({ data: { loading, error, repository }, location: { pathname
 
   function renderTable() {
     const routeNamespace = `/${repository.nameWithOwner}/issues`;
-    const { nodes } = issues;
+    const { nodes } = pullRequests;
     return (
       <Table data={nodes} autoHeight>
         <Column width={38} align="center">
@@ -189,7 +189,7 @@ function RepoIssues({ data: { loading, error, repository }, location: { pathname
     <RepoLayout key={repository.nameWithOwner} repo={repository} className="repo">
       {renderTableToolbar()}
       {renderTable()}
-      <Pagination pageInfo={issues.pageInfo} />
+      <Pagination pageInfo={pullRequests.pageInfo} />
     </RepoLayout>
   );
 }
@@ -224,7 +224,7 @@ export default graphql(query, {
       if (is) {
         states = {
           open: ['OPEN'],
-          closed: ['CLOSED']
+          closed: ['CLOSED', 'MERGED']
         }[is[1]];
       }
     }
@@ -233,4 +233,4 @@ export default graphql(query, {
       variables: { owner, name, states, orderField, orderDirection, ...pagination }
     };
   }
-})(RepoIssues);
+})(RepoPrs);
