@@ -9,7 +9,7 @@ function NavLink(props) {
 function RepoLayout({ params: { owner, name }, repo, router: { isActive }, children, ...props }) {
 
   function renderPageTitle() {
-    const { watchers, stargazers, forks } = repo;
+    const { watchers, stargazers, forkCount } = repo;
     return (
       <h1>
         <Link to={`/${owner}`}>{owner}</Link>
@@ -33,7 +33,7 @@ function RepoLayout({ params: { owner, name }, repo, router: { isActive }, child
             <IconButton size="sm" icon={<Icon icon="code-fork" />}>
               Fork
             </IconButton>
-            <Button size="sm">{forks.totalCount}</Button>
+            <Button size="sm">{forkCount}</Button>
           </ButtonGroup>
         </ButtonToolbar>
       </h1>
@@ -41,6 +41,7 @@ function RepoLayout({ params: { owner, name }, repo, router: { isActive }, child
   }
 
   function renderNav() {
+    const { hasIssuesEnabled, hasWikiEnabled } = repo;
     const routeNamespace = `/${owner}/${name}`;
 
     return (
@@ -48,12 +49,18 @@ function RepoLayout({ params: { owner, name }, repo, router: { isActive }, child
         <NavLink to={routeNamespace} active={isActive(routeNamespace, true) || isActive(`${routeNamespace}/commits`)}>
           <Icon icon="code" fixedWidth />Code
         </NavLink>
-        <NavLink to={`${routeNamespace}/issues`} active={isActive(`${routeNamespace}/issues`)}>
-          <Icon icon="exclamation-circle2" fixedWidth />Issues
-        </NavLink>
+        {
+          hasIssuesEnabled &&
+          <NavLink to={`${routeNamespace}/issues`} active={isActive(`${routeNamespace}/issues`)}>
+            <Icon icon="exclamation-circle2" fixedWidth />Issues
+          </NavLink>
+        }
         <NavLink to={`${routeNamespace}/pulls`} active={isActive(`${routeNamespace}/pulls`)}>Pull requests</NavLink>
         <NavLink to={`${routeNamespace}/projects`} active={isActive(`${routeNamespace}/projects`)}>Projects</NavLink>
-        <NavLink to={`${routeNamespace}/wiki`} active={isActive(`${routeNamespace}/wiki`)}>Wiki</NavLink>
+        {
+          hasWikiEnabled &&
+          <NavLink to={`${routeNamespace}/wiki`} active={isActive(`${routeNamespace}/wiki`)}>Wiki</NavLink>
+        }
         <NavLink to={`${routeNamespace}/pulse`} active={isActive(`${routeNamespace}/pulse`)}>Insights</NavLink>
         <NavLink to={`${routeNamespace}/settings`} active={isActive(`${routeNamespace}/settings`)}>Settings</NavLink>
       </Nav>

@@ -6,7 +6,7 @@ fragment RepoProfile on Repository {
   stargazers {
     totalCount
   }
-  forks {
-    totalCount
-  }
+  forkCount
+  hasIssuesEnabled
+  hasWikiEnabled
 }
