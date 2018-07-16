@@ -1,0 +1,21 @@
+query UserOverview($login: String!) {
+  user(login: $login) {
+    pinnedRepositories(first: 100) {
+      nodes {
+        name
+        nameWithOwner
+        description
+        primaryLanguage {
+          color
+          name
+        }
+        stargazers {
+          totalCount
+        }
+        forks {
+          totalCount
+        }
+      }
+    }
+  }
+}

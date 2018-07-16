@@ -4,21 +4,29 @@ import { Col, Grid, Nav, Row } from 'rsuite';
 import UserCard from '@/views/user/index/UserCard';
 import PinnedRepo from '@/components/PinnedRepo';
 import type { User } from '@/flow/graphql-types';
+import { Link, withRouter } from 'react-router';
+import type { RouteProps } from '@/flow/react-router';
+import Overview from '@/views/user/index/Overview';
 
-type Props = {
-  user: User
+type Props = RouteProps & {
+  user: User,
 }
 
-function UserProfileView({ user }: Props) {
+function UserProfileView({ user, ...props }: Props) {
   function renderNav() {
     const { repositories, starredRepositories, followers, following } = user;
+    const { location: { pathname, query: { tab = 'overview' } } } = props;
     return (
-      <Nav appearance="subtle" activeKey="overview">
-        <Nav.Item eventKey="overview">Overview</Nav.Item>
-        <Nav.Item eventKey="repositories">Repositories{repositories.totalCount}</Nav.Item>
-        <Nav.Item eventKey="stars">Stars{starredRepositories.totalCount}</Nav.Item>
-        <Nav.Item eventKey="followers">Followers{followers.totalCount}</Nav.Item>
-        <Nav.Item eventKey="following">Following{following.totalCount}</Nav.Item>
+      <Nav appearance="subtle" activeKey={tab}>
+        <Nav.Item eventKey="overview" componentClass={Link} to={{ pathname }}>Overview</Nav.Item>
+        <Nav.Item eventKey="repositories" componentClass={Link}
+                  to={{ pathname, query: { tab: 'repositories' } }}>Repositories{repositories.totalCount}</Nav.Item>
+        <Nav.Item eventKey="stars" componentClass={Link}
+                  to={{ pathname, query: { tab: 'stars' } }}>Stars{starredRepositories.totalCount}</Nav.Item>
+        <Nav.Item eventKey="followers" componentClass={Link}
+                  to={{ pathname, query: { tab: 'followers' } }}>Followers{followers.totalCount}</Nav.Item>
+        <Nav.Item eventKey="following" componentClass={Link}
+                  to={{ pathname, query: { tab: 'following' } }}>Following{following.totalCount}</Nav.Item>
       </Nav>
     );
   }
@@ -32,16 +40,7 @@ function UserProfileView({ user }: Props) {
           </Col>
           <Col md={18}>
             {renderNav()}
-            <h4>Pinned repositories</h4>
-            <Row>
-              {
-                user.pinnedRepositories.nodes.map(repo => (
-                  <Col key={repo.nameWithOwner} md={12}>
-                    <PinnedRepo repo={repo} owner={user} />
-                  </Col>
-                ))
-              }
-            </Row>
+            <Overview user={user} />
           </Col>
         </Row>
       </Grid>
@@ -49,4 +48,4 @@ function UserProfileView({ user }: Props) {
   );
 }
 
-export default UserProfileView;
+export default withRouter(UserProfileView);
