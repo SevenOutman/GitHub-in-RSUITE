@@ -12,10 +12,9 @@ type Props = RouteProps & {
   user: User,
 }
 
-function UserProfileView({ user, ...props }: Props) {
+function UserProfileView({ user, location: { pathname, query: { tab = 'overview' } } }: Props) {
   function renderNav() {
     const { repositories, starredRepositories, followers, following } = user;
-    const { location: { pathname, query: { tab = 'overview' } } } = props;
     return (
       <Nav appearance="subtle" activeKey={tab}>
         <Nav.Item eventKey="overview" componentClass={Link} to={{ pathname }}>Overview</Nav.Item>
@@ -40,7 +39,10 @@ function UserProfileView({ user, ...props }: Props) {
           </Col>
           <Col md={18}>
             {renderNav()}
-            <Overview user={user} />
+            {
+              tab === 'overview' &&
+              <Overview user={user} />
+            }
           </Col>
         </Row>
       </Grid>
