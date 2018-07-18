@@ -1,0 +1,27 @@
+query UserRepositories($login: String!) {
+  user(login: $login) {
+    repositories(first: 100) {
+      nodes {
+        name
+        description
+        repositoryTopics(first: 100) {
+          nodes {
+            topic {
+              name
+            }
+          }
+        }
+        primaryLanguage {
+          color
+          name
+        }
+        stargazers {
+          totalCount
+        }
+        forks {
+          totalCount
+        }
+      }
+    }
+  }
+}
