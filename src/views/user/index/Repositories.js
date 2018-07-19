@@ -1,33 +1,58 @@
 import React, { Fragment } from 'react';
-import { Loader, Row } from 'rsuite';
+import { Divider, Loader, Panel, Tag } from 'rsuite';
 import { graphql } from 'react-apollo';
 import query from './Repositories.graphql';
+import { Link, withRouter } from 'react-router';
+import Pagination from '@/components/Pagination';
 
-function RepoListItem({ repo }) {
+function RepoListItem({ repo, owner }) {
   return (
-    <div>
-      {repo.name}
-    </div>
+    <Fragment>
+      <Panel
+        header={
+          <Link to={`/${owner.login}/${repo.name}`}>
+            <h3 style={{ margin: 0 }}>
+              {repo.name}
+            </h3>
+          </Link>
+        }
+      >
+        <p>{repo.description}</p>
+        <div>
+          {
+            repo.repositoryTopics.nodes.map(({ topic }) => (
+              <Tag>{topic.name}</Tag>
+            ))
+          }
+        </div>
+      </Panel>
+      <Divider />
+    </Fragment>
   );
 }
 
-function Repositories({ data: { user, error, loading } }) {
+function Repositories({ user, data: { user: { repositories } = {}, error, loading } }) {
   if (loading) return <Loader />;
   if (error) return <p>Error :(</p>;
 
   return (
     <Fragment>
-      <Row>
-        {
-          user.repositories.nodes.map(repo => (
-            <RepoListItem key={repo.name} repo={repo} />
-          ))
-        }
-      </Row>
+      {
+        repositories.nodes.map(repo => (
+          <RepoListItem key={repo.name} repo={repo} owner={user} />
+        ))
+      }
+      <Pagination pageInfo={repositories.pageInfo} />
     </Fragment>
   );
 }
 
-export default graphql(query, {
-  options: ({ user: { login } }) => ({ variables: { login } })
-})(Repositories);
+export default withRouter(graphql(query, {
+  options: ({ user: { login }, location: { query: { before, after } } }) => {
+    const perPage = 30;
+    const pagination = before ? { last: perPage, before } : { first: perPage, after };
+    return {
+      variables: { login, ...pagination }
+    };
+  }
+})(Repositories));

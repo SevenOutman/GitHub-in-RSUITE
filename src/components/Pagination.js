@@ -12,18 +12,18 @@ type Props = RouteProps & {
 
 function Pagination({ pageInfo, location }: Props) {
   const { startCursor, hasPreviousPage, endCursor, hasNextPage } = pageInfo;
-  const { pathname } = location;
+  const { pathname, query } = location;
   return (
     <ButtonToolbar>
       <ButtonGroup>
         <LinkButton
-          to={{ pathname, query: { before: startCursor } }}
+          to={{ pathname, query: { ...query, after: null, before: startCursor } }}
           disabled={!hasPreviousPage}
         >
           Previous
         </LinkButton>
         <LinkButton
-          to={{ pathname, query: { after: endCursor } }}
+          to={{ pathname, query: { ...query, before: null, after: endCursor } }}
           disabled={!hasNextPage}
         >
           Next
