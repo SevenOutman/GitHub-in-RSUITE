@@ -1,18 +1,18 @@
 import React, { Fragment } from 'react';
 import { Divider, Loader, Panel, Tag } from 'rsuite';
 import { graphql } from 'react-apollo';
-import query from './Repositories.graphql';
+import query from './Stars.graphql';
 import { Link, withRouter } from 'react-router';
 import Pagination from '@/components/Pagination';
 
-function RepoListItem({ repo, owner }) {
+function RepoListItem({ repo }) {
   return (
     <Fragment>
       <Panel
         header={
-          <Link to={`/${owner.login}/${repo.name}`}>
+          <Link to={`/${repo.nameWithOwner}`}>
             <h3 style={{ margin: 0 }}>
-              {repo.name}
+              {repo.nameWithOwner}
             </h3>
           </Link>
         }
@@ -31,18 +31,18 @@ function RepoListItem({ repo, owner }) {
   );
 }
 
-function Repositories({ user, data: { user: { repositories } = {}, error, loading } }) {
+function StarredRepositories({ user, data: { user: { starredRepositories } = {}, error, loading } }) {
   if (loading) return <Loader />;
   if (error) return <p>Error :(</p>;
 
   return (
     <Fragment>
       {
-        repositories.nodes.map(repo => (
-          <RepoListItem key={repo.name} repo={repo} owner={user} />
+        starredRepositories.nodes.map(repo => (
+          <RepoListItem key={repo.nameWithOwner} repo={repo} />
         ))
-      }
-      <Pagination pageInfo={repositories.pageInfo} />
+      }s
+      <Pagination pageInfo={starredRepositories.pageInfo} />
     </Fragment>
   );
 }
@@ -55,4 +55,4 @@ export default withRouter(graphql(query, {
       variables: { login, ...pagination }
     };
   }
-})(Repositories));
+})(StarredRepositories));

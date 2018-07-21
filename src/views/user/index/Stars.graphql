@@ -1,0 +1,33 @@
+query UserStars($login: String!, $first: Int, $after: String, $last: Int, $before: String) {
+  user(login: $login) {
+    starredRepositories(first: $first, after: $after, last: $last, before: $before, orderBy: { direction: DESC, field: STARRED_AT }) {
+      nodes {
+        nameWithOwner
+        description
+        repositoryTopics(first: 100) {
+          nodes {
+            topic {
+              name
+            }
+          }
+        }
+        primaryLanguage {
+          color
+          name
+        }
+        stargazers {
+          totalCount
+        }
+        forks {
+          totalCount
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+        hasPreviousPage
+        startCursor
+      }
+    }
+  }
+}

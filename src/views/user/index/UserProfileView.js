@@ -2,12 +2,12 @@
 import React from 'react';
 import { Col, Grid, Nav, Row } from 'rsuite';
 import UserCard from '@/views/user/index/UserCard';
-import PinnedRepo from '@/components/PinnedRepo';
 import type { User } from '@/flow/graphql-types';
 import { Link, withRouter } from 'react-router';
 import type { RouteProps } from '@/flow/react-router';
 import Overview from '@/views/user/index/Overview';
 import Repositories from '@/views/user/index/Repositories';
+import Stars from '@/views/user/index/Stars';
 
 type Props = RouteProps & {
   user: User,
@@ -47,6 +47,10 @@ function UserProfileView({ user, location: { pathname, query: { tab = 'overview'
             {
               tab === 'repositories' &&
               <Repositories user={user} />
+            }
+            {
+              tab === 'stars' &&
+              <Stars user={user}/>
             }
           </Col>
         </Row>
