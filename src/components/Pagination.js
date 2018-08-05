@@ -14,7 +14,7 @@ function Pagination({ pageInfo, location }: Props) {
   const { startCursor, hasPreviousPage, endCursor, hasNextPage } = pageInfo;
   const { pathname, query } = location;
   return (
-    <ButtonToolbar>
+    <ButtonToolbar style={{ marginTop: 20 }}>
       <ButtonGroup>
         <LinkButton
           to={{ pathname, query: { ...query, after: null, before: startCursor } }}
